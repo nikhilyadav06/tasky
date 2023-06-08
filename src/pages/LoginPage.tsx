@@ -2,7 +2,7 @@ import { useContext, useState } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
 
-const Login = () => {
+const LoginPage = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -30,4 +30,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default LoginPage

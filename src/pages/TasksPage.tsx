@@ -1,17 +1,18 @@
 import { useContext, useState } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
+import Tasks from '../components/Tasks'
 
-interface Task {
+interface ITask {
     id: number
     description: string
-    subTasks: Task[]
+    subTasks: ITask[]
 }
 
-const Tasks = () => {
+const TasksPage = () => {
     const { loggedInUser } = useContext(AuthContext)
 
-    const [tasks, setTasks] = useState<Task[]>([])
+    const [tasks, setTasks] = useState<ITask[]>([])
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [taskDescription, setTaskDescription] = useState<string>('')
     const [parentTaskId, setParentTaskId] = useState<number | null>(null)
@@ -22,22 +23,53 @@ const Tasks = () => {
         setIsModalOpen(true)
     }
 
+    const closeModal = () => {
+        setTaskDescription('')
+        setParentTaskId(null)
+        setIsModalOpen(false)
+    }
+
     const createTask = () => {
         if (taskDescription === '') return
 
-        const newTask: Task = {
+        const newTask: ITask = {
             id: Math.floor(100000 + Math.random() * 900000),
             description: taskDescription,
             subTasks: []
         }
 
-        const newTasksArray = JSON.parse(JSON.stringify([...tasks, newTask]))
+        if (parentTaskId === null) {
+            const newTasksArray = JSON.parse(JSON.stringify([...tasks, newTask]))
+            setTasks(newTasksArray)
+        } else {
+            const tasksCopy = JSON.parse(JSON.stringify(tasks))
+            const taskFound: ITask | null = findTask(tasksCopy, parentTaskId)
 
-        setTasks(newTasksArray)
+            if (taskFound !== null) {
+                taskFound.subTasks.push(newTask)
+                
+                const newTasksArray = JSON.parse(JSON.stringify([...tasksCopy]))
+                setTasks(newTasksArray)
+            }
+        }
 
         setIsModalOpen(false)
         setTaskDescription('')
         setParentTaskId(null)
+    }
+
+    const findTask = (tasksArray: ITask[], id: number): ITask | null  => {
+        if (tasksArray.length === 0) return null
+
+        for (const task of tasksArray) {
+            if (task.id === id) return task
+
+            const subTask: ITask | null = findTask(task.subTasks, id)
+
+            if (subTask !== null) return subTask
+        }
+
+        return null
     }
 
     return (
@@ -54,18 +86,18 @@ const Tasks = () => {
                     <div>
                         <input type="text" placeholder='task description' onChange={e => setTaskDescription(e.target.value)} />
                         <button onClick={createTask}>Add</button>
+                        <button onClick={closeModal}>Close</button>
                     </div>
                     : <></>
                 }
             </div>
 
             <div>
-                {tasks.map(task => (
-                    <div>{task.description}</div>
-                ))}
+                <h2>Tasks</h2>
+                <Tasks tasks={tasks} openModal={openModal} />
             </div>
         </>
     )
 }
 
-export default Tasks
+export default TasksPage

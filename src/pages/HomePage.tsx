@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
 
-const Home = () => {
+const HomePage = () => {
     const { loggedInUser } = useContext(AuthContext)
 
     return (
@@ -15,4 +15,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default HomePage
