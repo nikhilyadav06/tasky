@@ -6,13 +6,14 @@ interface ITask {
     id: number
     description: string
     subTasks: ITask[]
+    completed: boolean
 }
 
-const Tasks = ({ tasks, openModal }: { tasks: ITask[], openModal: (parentId: number | null) => void }) => {
+const Tasks = ({ tasks, openModal, toggleTaskStatus }: { tasks: ITask[], openModal: (parentId: number | null) => void, toggleTaskStatus: (id: number) => void }) => {
     return (
-        <div>
+        <div className='w-full'>
             {tasks.map(task => (
-                <Task task={task} openModal={openModal} />
+                <Task task={task} openModal={openModal} toggleTaskStatus={toggleTaskStatus} />
             ))}
         </div>
     )

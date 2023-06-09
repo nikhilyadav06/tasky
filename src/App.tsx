@@ -10,17 +10,19 @@ import PrivateRoute from './components/PrivateRoute'
 function App() {
     return (
         <>
-            <Router>
-                <AuthContextProvider>
-                    <Routes>
-                        <Route path='/' element={<HomePage />} />
-                        <Route path='/login' element={<LoginPage />} />
-                        <Route element={<PrivateRoute />}>
-                            <Route path='/tasks' element={<TasksPage />} />
-                        </Route>
-                    </Routes>
-                </AuthContextProvider>
-            </Router>
+            <div className=' min-h-screen'>
+                <Router>
+                    <AuthContextProvider>
+                        <Routes>
+                            <Route path='/' element={<HomePage />} />
+                            <Route path='/login' element={<LoginPage />} />
+                            <Route element={<PrivateRoute />}>
+                                <Route path='/tasks' element={<TasksPage />} />
+                            </Route>
+                        </Routes>
+                    </AuthContextProvider>
+                </Router>
+            </div>
         </>
     )
 }
