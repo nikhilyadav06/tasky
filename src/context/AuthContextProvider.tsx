@@ -16,18 +16,23 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
     useEffect(() => {
         const af = async (token: string) => {
-            const secret = new TextEncoder().encode(
-                process.env.SECRET_KEY,
-            )
-
-            const { payload }: { payload: CustomPayload } = await jose.jwtVerify(token, secret)
-
-            const userFromToken: string | undefined = payload.username
-
-            if (userFromToken) {
-                setLoggedInUser(userFromToken)
-            } else {
-                throw new Error('username not valid')
+            try {
+                const secret = new TextEncoder().encode(
+                    'SECRET_KEY',
+                )
+    
+                const { payload }: { payload: CustomPayload } = await jose.jwtVerify(token, secret)
+    
+                const userFromToken: string | undefined = payload.username
+    
+                if (userFromToken) {
+                    setLoggedInUser(userFromToken)
+                    localStorage.setItem('token', token)
+                } else {
+                    throw new Error('username not valid')
+                }
+            } catch (error) {
+                localStorage.removeItem('token')
             }
         }
         const token = localStorage.getItem('token')
@@ -49,15 +54,15 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     const loginUser = (username: string) => {
         const af = async () => {
             const secret = new TextEncoder().encode(
-                process.env.SECRET_KEY,
+                'SECRET_KEY',
             )
             
             const token = await new jose.SignJWT({ username })
                 .setProtectedHeader({ alg: 'HS256' })
-                .setExpirationTime('1h')
                 .sign(secret)
 
             localStorage.setItem('token', token)
+            console.log(token)
         }
         af()
 
