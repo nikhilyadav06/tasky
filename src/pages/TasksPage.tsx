@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
-import { AuthContext } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
+
+import { AuthContext } from '../context/AuthContext'
 import Tasks from '../components/Tasks'
 
 interface ITask {

@@ -1,17 +1,22 @@
 import { useContext, useState } from 'react'
+import { Link, Navigate } from 'react-router-dom'
+
 import { AuthContext } from '../context/AuthContext'
-import { Link } from 'react-router-dom'
 
 const LoginPage = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const { loggedInUser, setLoggedInUser } = useContext(AuthContext)
+    const { loggedInUser, loginUser } = useContext(AuthContext)
 
     const handleLogin = () => {
         if (username === 'user' && password === 'pass') {
-            setLoggedInUser('user')
+            loginUser(username)
         }
+    }
+
+    if (loggedInUser === 'user') {
+        return <Navigate to='/' />
     }
 
     return (

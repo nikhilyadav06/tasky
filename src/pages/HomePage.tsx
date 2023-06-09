@@ -1,6 +1,8 @@
 import { useContext } from 'react'
-import { AuthContext } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
+
+import { AuthContext } from '../context/AuthContext'
+import Logout from '../components/Logout'
 
 const HomePage = () => {
     const { loggedInUser } = useContext(AuthContext)
@@ -11,6 +13,7 @@ const HomePage = () => {
             {loggedInUser}
             <Link to='/tasks'>Tasks</Link>
             <Link to='/login'>Login</Link>
+            <Logout />
         </>
     )
 }
